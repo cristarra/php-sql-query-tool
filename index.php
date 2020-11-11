@@ -241,7 +241,7 @@
         <input type="submit"/>
         <br/>
         <?= $log ?>
-        <?php if(!empty((array)$results)) { ?>
+        <?php if(!empty($results)) { ?>
         <table style="width:100%; border: 1px solid black;">
             <tr style="border: 1px solid black;">
             <?php foreach(array_keys($results[0]) as $key){ ?>
