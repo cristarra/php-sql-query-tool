@@ -30,14 +30,24 @@
     $result_subject  = mysqli_query($conn, $sql_subject);
     $result_supplier = mysqli_query($conn, $sql_supplier);
 
-    $books = mysqli_fetch_all($result_book,MYSQLI_ASSOC);
-    $customers = mysqli_fetch_all($result_customer,MYSQLI_ASSOC);
-    $employees = mysqli_fetch_all($result_employee,MYSQLI_ASSOC);
-    $orders = mysqli_fetch_all($result_order,MYSQLI_ASSOC);
-    $order_details = mysqli_fetch_all($result_order_detail,MYSQLI_ASSOC);
-    $shippers = mysqli_fetch_all($result_shipper,MYSQLI_ASSOC);
-    $subjects = mysqli_fetch_all($result_subject,MYSQLI_ASSOC);
-    $suppliers = mysqli_fetch_all($result_supplier,MYSQLI_ASSOC);
+    function mysqli_fetch_all_alt($result,$type = NULL) {
+        $select = array();
+
+        while( $row = mysqli_fetch_assoc($result) ) {
+            $select[] = $row;
+        }
+
+        return $select;
+    }
+
+    $books = mysqli_fetch_all_alt($result_book,MYSQLI_ASSOC);
+    $customers = mysqli_fetch_all_alt($result_customer,MYSQLI_ASSOC);
+    $employees = mysqli_fetch_all_alt($result_employee,MYSQLI_ASSOC);
+    $orders = mysqli_fetch_all_alt($result_order,MYSQLI_ASSOC);
+    $order_details = mysqli_fetch_all_alt($result_order_detail,MYSQLI_ASSOC);
+    $shippers = mysqli_fetch_all_alt($result_shipper,MYSQLI_ASSOC);
+    $subjects = mysqli_fetch_all_alt($result_subject,MYSQLI_ASSOC);
+    $suppliers = mysqli_fetch_all_alt($result_supplier,MYSQLI_ASSOC);
 
 ?>
 
