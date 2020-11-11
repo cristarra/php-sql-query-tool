@@ -7,9 +7,32 @@
     $conn = mysqli_connect($servername, $username, $password, $dbname);
 
     $log=null;
+    $sql=null;
+    $results = array();
 
     if (!$conn) {
         $log = "Connection failed: " . mysqli_connect_error();
+    }
+
+    if(!empty($_POST["sql"])){
+        $sql = $_POST["sql"];
+        if(!empty($sql)){
+            if(stripos($sql, 'drop') === false){
+                $result_statement = mysqli_query($conn, $sql);
+                if ($result_statement){
+                    $results = mysqli_fetch_all_alt($result_statement,MYSQLI_ASSOC);
+                    if(empty($results)){
+                        $log = "Query: \"".$sql."\" executed successfully...";
+                    }
+                }else{
+                    $log = "Error description: " . mysqli_error($conn);
+                }
+            }else{
+                $log = "DROP are not allowed...";
+            }
+        }else{
+            $log = "Please enter sql query first...";
+        }
     }
 
     $sql_book = "SELECT * FROM db_book";
@@ -33,7 +56,7 @@
     function mysqli_fetch_all_alt($result,$type = NULL) {
         $select = array();
 
-        while( $row = mysqli_fetch_assoc($result) ) {
+        while( $row = @mysqli_fetch_assoc($result) ) {
             $select[] = $row;
         }
 
@@ -212,6 +235,33 @@
             </tr>
         <?php } ?>
     </table>
+
+    <form method="post">
+        <textarea name="sql" placeholder="Enter sql query..." style="width: 60%; min-height: 200px;"><?= $sql ?></textarea>
+        <input type="submit"/>
+        <br/>
+        <?= $log ?>
+        <?php if(!empty((array)$results)) { ?>
+        <table style="width:100%; border: 1px solid black;">
+            <tr style="border: 1px solid black;">
+            <?php foreach(array_keys($results[0]) as $key){ ?>
+                <td style="border: 1px solid black;">
+                    <?= $key ?>
+                </td>
+            <?php } ?>
+            </tr>
+            <?php foreach($results as $result) { ?>
+                <tr style="border: 1px solid black;">
+                    <?php foreach(array_keys($results[0]) as $key) { ?>
+                        <td style="border: 1px solid black;">
+                            <?= $result[$key] ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        </table>
+        <?php } ?>
+    </form>
 </Pre>
 
 
